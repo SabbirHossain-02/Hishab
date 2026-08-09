@@ -42,8 +42,8 @@ export const PermissionScreen = ({ navigation }: any) => {
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.card}>
-          <View style={styles.featureRow}>
+        <View style={styles.listContainer}>
+          <View style={[styles.featureRow, styles.listItemBorder]}>
             <View style={[styles.iconContainer, { backgroundColor: 'rgba(74, 0, 224, 0.1)' }]}>
               <MessageSquare size={22} color={tokens.colors.gradient.primary[0]} />
             </View>
@@ -52,10 +52,8 @@ export const PermissionScreen = ({ navigation }: any) => {
               <Text variant="sm" muted style={styles.cardDesc}>Used exclusively for financial transaction parsing (bKash and Nagad) to automatically update your budgets and dashboard. Personal messages are ignored.</Text>
             </View>
           </View>
-        </View>
 
-        <View style={styles.card}>
-          <View style={styles.featureRow}>
+          <View style={[styles.featureRow, { paddingBottom: 0 }]}>
             <View style={[styles.iconContainer, { backgroundColor: 'rgba(142, 45, 226, 0.1)' }]}>
               <Bell size={22} color={tokens.colors.gradient.primary[1]} />
             </View>
@@ -153,7 +151,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: tokens.spacing.lg,
     paddingBottom: tokens.spacing.xl,
   },
-  card: {
+  listContainer: {
     marginBottom: tokens.spacing.md,
     backgroundColor: '#ffffff',
     borderRadius: tokens.borderRadius.lg,
@@ -165,6 +163,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowRadius: 12,
     elevation: 4,
+  },
+  listItemBorder: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: tokens.colors.tealNeutral[100],
+    paddingBottom: tokens.spacing.lg,
+    marginBottom: tokens.spacing.lg,
   },
   featureRow: {
     flexDirection: 'row',

@@ -6,7 +6,7 @@ import { Text } from '../components/Text';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { tokens } from '../theme/tokens';
-import { ArrowDownLeft, ArrowUpRight, Plus, Activity, HeartPulse } from 'lucide-react-native';
+import { ArrowDownLeft, ArrowUpRight, Plus, Activity, HeartPulse, Menu } from 'lucide-react-native';
 import { sqliteDb } from '../database';
 import { calculateHealthScore, HealthScore } from '../services/healthScoreService';
 
@@ -41,6 +41,14 @@ export const HomeScreen = () => {
   const [healthScore, setHealthScore] = useState<HealthScore | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [greeting, setGreeting] = useState<string>('Good Morning');
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting('Good Morning');
+    else if (hour < 18) setGreeting('Good Afternoon');
+    else setGreeting('Good Evening');
+  }, []);
 
   const animatedBalance = useAnimatedNumber(balance);
 
@@ -78,10 +86,18 @@ export const HomeScreen = () => {
     <View style={styles.headerContainer}>
       <View style={styles.greetingHeader}>
         <View>
-          <Text variant="base" muted>Good Morning,</Text>
+          <Text variant="base" muted>{greeting},</Text>
           <Text variant="xl" weight="bold">Sabbir Hossain</Text>
         </View>
-        <View style={styles.profileAvatar} />
+        <View style={styles.headerRightControls}>
+          <View style={styles.profileAvatar} />
+          <Button 
+            variant="text" 
+            style={styles.menuBtn}
+            onPress={() => {}}
+            children={<Menu size={24} color={tokens.colors.tealNeutral.textDark} />}
+          />
+        </View>
       </View>
 
       <LinearGradient
@@ -204,6 +220,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: tokens.spacing.lg,
     marginTop: tokens.spacing.sm,
+  },
+  headerRightControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  menuBtn: {
+    padding: tokens.spacing.xs,
+    marginLeft: tokens.spacing.sm,
   },
   profileAvatar: {
     width: 44,
