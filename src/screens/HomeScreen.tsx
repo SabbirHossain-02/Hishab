@@ -1,14 +1,23 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { View, StyleSheet, FlatList, RefreshControl, TouchableOpacity, Image } from 'react-native';
 import { Screen } from '../components/Screen';
 import { Text } from '../components/Text';
-import { Card } from '../components/Card';
-import { Button } from '../components/Button';
-import { tokens } from '../theme/tokens';
-import { ArrowDownLeft, ArrowUpRight, Plus, Activity, HeartPulse, Menu } from 'lucide-react-native';
+import { ArrowDownLeft, ArrowUpRight, Bell, Search, Send, Download, Repeat, MoreHorizontal } from 'lucide-react-native';
 import { sqliteDb } from '../database';
 import { calculateHealthScore, HealthScore } from '../services/healthScoreService';
+import { tokens } from '../theme/tokens';
+
+// Dark Forest Theme Constants
+const theme = {
+  bg: '#0F1A15', // Main dark background
+  cardTop: '#243F32', // Darker green for card
+  cardBottom: '#9FDD38', // Neon green
+  surface: '#1A2A22', // Quick action buttons
+  sheet: '#F4F6F5', // Whiteish bottom sheet
+  textLight: '#FFFFFF',
+  textMuted: '#849B90',
+  textDark: '#0D1612',
+};
 
 const useAnimatedNumber = (value: number) => {
   const [displayValue, setDisplayValue] = useState(0);
@@ -41,14 +50,6 @@ export const HomeScreen = () => {
   const [healthScore, setHealthScore] = useState<HealthScore | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [greeting, setGreeting] = useState<string>('Good Morning');
-
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Good Morning');
-    else if (hour < 18) setGreeting('Good Afternoon');
-    else setGreeting('Good Evening');
-  }, []);
 
   const animatedBalance = useAnimatedNumber(balance);
 
@@ -83,240 +84,292 @@ export const HomeScreen = () => {
   }, [fetchData]);
 
   const renderHeader = () => (
-    <View style={styles.headerContainer}>
-      <View style={styles.greetingHeader}>
-        <View>
-          <Text variant="base" muted>{greeting},</Text>
-          <Text variant="xl" weight="bold">Sabbir Hossain</Text>
-        </View>
-        <View style={styles.headerRightControls}>
-          <View style={styles.profileAvatar} />
-          <TouchableOpacity 
-            style={styles.menuBtn}
-            onPress={() => {}}
-          >
-            <Menu size={24} color={tokens.colors.tealNeutral.textDark} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <LinearGradient
-        colors={tokens.colors.gradient.primary as [string, string, ...string[]]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.balanceCard}
-      >
-        <Text variant="sm" weight="medium" style={styles.balanceLabel}>Total Balance</Text>
-        <Text variant="display" weight="bold" style={styles.balanceText}>
-          ৳ {animatedBalance.toLocaleString('en-IN')}
-        </Text>
-        <View style={styles.cardFooter}>
-          <Text variant="sm" style={styles.cardFooterText}>4756 •••• •••• 9013</Text>
-          <View style={styles.cardLogoCircle} />
-        </View>
-      </LinearGradient>
-
-      <View style={styles.quickActions}>
-        <Card variant="elevated" style={styles.actionCard}>
-          <View style={[styles.actionIconBg, { backgroundColor: 'rgba(255, 145, 0, 0.1)' }]}>
-            <ArrowUpRight size={20} color={tokens.colors.semantic.warning} />
+    <View style={styles.topContainer}>
+      <View style={styles.headerRow}>
+        <View style={styles.profileRow}>
+          <View style={styles.avatar} />
+          <View>
+            <Text variant="sm" style={{ color: theme.textMuted }}>Welcome Back</Text>
+            <Text variant="base" weight="bold" style={{ color: theme.textLight }}>Sabbir Hossain</Text>
           </View>
-          <Text variant="sm" weight="bold">Spend</Text>
-          <Text variant="sm" muted>৳ {spend.toLocaleString('en-IN')}</Text>
-        </Card>
+        </View>
+        <TouchableOpacity style={styles.iconButton}>
+          <Bell size={20} color={theme.textLight} />
+        </TouchableOpacity>
+      </TouchableOpacity>
 
-        {healthScore && (
-          <Card variant="elevated" style={styles.actionCard}>
-            <View style={[styles.actionIconBg, { backgroundColor: 'rgba(0, 200, 83, 0.1)' }]}>
-              <HeartPulse size={20} color={tokens.colors.semantic.success} />
-            </View>
-            <Text variant="sm" weight="bold">Health</Text>
-            <Text variant="sm" muted>{healthScore.totalScore}/100</Text>
-          </Card>
-        )}
-      </View>
-      
-      <View style={styles.sectionHeader}>
-        <Text variant="lg" weight="bold">Payment history</Text>
-      </View>
-    </View>
-  );
-
-  const renderEmptyState = () => (
-    <View style={styles.emptyState}>
-      <Text variant="lg" weight="bold" style={styles.emptyTitle}>No Transactions Yet</Text>
-      <Text variant="base" muted style={styles.emptyDesc}>
-        Hishab is waiting for your next bKash or Nagad SMS.
+      <Text variant="sm" style={styles.balanceLabel}>Total Balance</Text>
+      <Text variant="display" weight="bold" style={styles.balanceValue}>
+        ৳ {animatedBalance.toLocaleString('en-IN')}
       </Text>
-    </View>
-  );
 
-  const renderErrorState = () => (
-    <View style={styles.emptyState}>
-      <Text variant="lg" weight="bold" color={tokens.colors.semantic.error}>Something went wrong</Text>
-      <Text variant="base" muted style={styles.emptyDesc}>{error}</Text>
-      <Button title="Retry" variant="primary" onPress={fetchData} />
+      {/* Credit Card Graphic */}
+      <View style={styles.cardContainer}>
+        <View style={styles.cardTopHalf}>
+          <View style={styles.cardCircles}>
+            <View style={[styles.cardCircle, { backgroundColor: '#EB001B', left: 0 }]} />
+            <View style={[styles.cardCircle, { backgroundColor: '#F79E1B', left: 18 }]} />
+          </View>
+          <Text style={styles.cardNumber}>••••  ••••  ••••  9013</Text>
+        </View>
+        <View style={styles.cardBottomHalf}>
+          <View>
+            <Text style={styles.cardInfoLabel}>Cardholder</Text>
+            <Text style={styles.cardInfoValue}>Sabbir Rahman</Text>
+          </View>
+          <View>
+            <Text style={styles.cardInfoLabel}>Exp</Text>
+            <Text style={styles.cardInfoValue}>09/28</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Quick Actions */}
+      <View style={styles.actionsRow}>
+        <View style={styles.actionItem}>
+          <TouchableOpacity style={styles.actionBtnActive}>
+            <ArrowUpRight size={20} color={theme.bg} />
+          </TouchableOpacity>
+          <Text variant="xs" style={{ color: theme.textLight, marginTop: 8 }}>Spend</Text>
+        </View>
+        <View style={styles.actionItem}>
+          <TouchableOpacity style={styles.actionBtn}>
+            <Download size={20} color={theme.textLight} />
+          </TouchableOpacity>
+          <Text variant="xs" style={{ color: theme.textMuted, marginTop: 8 }}>Income</Text>
+        </View>
+        <View style={styles.actionItem}>
+          <TouchableOpacity style={styles.actionBtn}>
+            <Repeat size={20} color={theme.textLight} />
+          </TouchableOpacity>
+          <Text variant="xs" style={{ color: theme.textMuted, marginTop: 8 }}>Exchange</Text>
+        </View>
+        <View style={styles.actionItem}>
+          <TouchableOpacity style={styles.actionBtn}>
+            <MoreHorizontal size={20} color={theme.textLight} />
+          </TouchableOpacity>
+          <Text variant="xs" style={{ color: theme.textMuted, marginTop: 8 }}>More</Text>
+        </View>
+      </View>
+      {/* Sheet Handle Area */}
+      <View style={styles.sheetTopRadius}>
+        <View style={styles.sheetHandle} />
+        <View style={styles.sheetHeaderRow}>
+          <Text variant="base" weight="bold" style={{ color: theme.textDark }}>Transaction History</Text>
+          <Text variant="sm" style={{ color: theme.textMuted }}>View all ›</Text>
+        </View>
+      </View>
     </View>
   );
 
   const renderTransaction = ({ item }: { item: any }) => {
     const isIncome = item.type === 'in';
     return (
-      <View style={styles.transactionCard}>
-        <View style={[styles.txIcon, { backgroundColor: isIncome ? 'rgba(0, 200, 83, 0.1)' : 'rgba(255, 23, 68, 0.1)' }]}>
-          {isIncome ? (
-            <ArrowDownLeft size={20} color={tokens.colors.semantic.success} />
-          ) : (
-            <ArrowUpRight size={20} color={tokens.colors.semantic.error} />
-          )}
+      <View style={styles.txItem}>
+        <View style={styles.txIconWrapper}>
+          <View style={styles.txAvatarPlaceholder}>
+            <Text variant="sm" weight="bold" style={{ color: theme.textLight }}>
+              {item.merchant_text ? item.merchant_text.substring(0, 2).toUpperCase() : (isIncome ? 'IN' : 'OUT')}
+            </Text>
+          </View>
         </View>
         <View style={styles.txDetails}>
-          <Text variant="base" weight="bold" numberOfLines={1}>{item.merchant_text || (isIncome ? 'Deposit' : 'Withdrawal')}</Text>
-          <Text variant="sm" muted>{item.account_id.toUpperCase()} • {new Date(item.timestamp).toLocaleDateString()}</Text>
+          <Text variant="base" weight="bold" style={{ color: theme.textDark }}>
+            {item.merchant_text || (isIncome ? 'Deposit' : 'Withdrawal')}
+          </Text>
+          <Text variant="sm" style={{ color: theme.textMuted }}>
+            {new Date(item.timestamp).toLocaleDateString()} • {item.account_id.toUpperCase()}
+          </Text>
         </View>
-        <Text variant="base" weight="bold" color={isIncome ? tokens.colors.semantic.success : tokens.colors.semantic.error}>
-          {isIncome ? '+' : '-'} ৳{item.amount}
-        </Text>
+        <View style={{ alignItems: 'flex-end' }}>
+          <Text variant="base" weight="bold" style={{ color: theme.textDark }}>
+            {isIncome ? '+' : '-'}${item.amount.toLocaleString('en-IN')}
+          </Text>
+          <Text variant="xs" style={{ color: theme.textMuted }}>Receive</Text>
+        </View>
       </View>
     );
   };
 
-  if (error && !loading && transactions.length === 0) {
-    return <Screen>{renderErrorState()}</Screen>;
-  }
-
   return (
-    <Screen style={styles.container}>
+    <View style={styles.container}>
       <FlatList
         data={transactions}
         keyExtractor={item => item.id}
-        renderItem={renderTransaction}
         ListHeaderComponent={renderHeader}
-        ListEmptyComponent={!loading ? renderEmptyState : null}
+        renderItem={renderTransaction}
         contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={fetchData} tintColor={tokens.colors.gradient.primary[0]} />
+          <RefreshControl refreshing={loading} onRefresh={fetchData} tintColor={theme.cardBottom} />
         }
       />
-    </Screen>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: tokens.colors.tealNeutral[50], // Very soft light background
+    backgroundColor: theme.bg,
   },
-  listContent: {
-    padding: tokens.spacing.lg,
-    paddingBottom: tokens.spacing.xxl,
+  topContainer: {
+    paddingHorizontal: tokens.spacing.xl,
+    paddingTop: 60, // Safe area roughly
+    paddingBottom: tokens.spacing.xl,
+    backgroundColor: theme.bg,
   },
-  headerContainer: {
-    marginBottom: tokens.spacing.sm,
-  },
-  greetingHeader: {
+  headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: tokens.spacing.lg,
-    marginTop: tokens.spacing.sm,
+    marginBottom: tokens.spacing.xl,
   },
-  headerRightControls: {
+  profileRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  menuBtn: {
-    padding: tokens.spacing.xs,
-    marginLeft: tokens.spacing.sm,
-  },
-  profileAvatar: {
+  avatar: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: theme.surface,
+    marginRight: tokens.spacing.sm,
   },
-  balanceCard: {
-    borderRadius: tokens.borderRadius.lg,
-    padding: tokens.spacing.xl,
-    marginBottom: tokens.spacing.lg,
-    ...tokens.shadows.lg,
+  iconButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   balanceLabel: {
-    color: 'rgba(255,255,255,0.7)',
-    marginBottom: tokens.spacing.xs,
+    color: theme.textMuted,
+    textAlign: 'center',
+    marginBottom: 4,
   },
-  balanceText: {
-    color: '#ffffff',
-    marginBottom: tokens.spacing.xl,
+  balanceValue: {
+    color: theme.textLight,
+    textAlign: 'center',
+    marginBottom: 32,
   },
-  cardFooter: {
+  cardContainer: {
+    width: '100%',
+    height: 200,
+    borderRadius: 24,
+    overflow: 'hidden',
+    marginBottom: 32,
+  },
+  cardTopHalf: {
+    flex: 0.6,
+    backgroundColor: theme.cardTop,
+    padding: tokens.spacing.lg,
+    justifyContent: 'space-between',
+  },
+  cardBottomHalf: {
+    flex: 0.4,
+    backgroundColor: theme.cardBottom,
+    padding: tokens.spacing.lg,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  cardFooterText: {
-    color: 'rgba(255,255,255,0.8)',
-    letterSpacing: 2,
+  cardCircles: {
+    height: 30,
+    width: 50,
   },
-  cardLogoCircle: {
+  cardCircle: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    position: 'absolute',
+    opacity: 0.8,
   },
-  quickActions: {
+  cardNumber: {
+    color: theme.textMuted,
+    fontSize: 16,
+    letterSpacing: 2,
+    marginTop: 10,
+  },
+  cardInfoLabel: {
+    color: 'rgba(13, 22, 18, 0.5)',
+    fontSize: 11,
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  cardInfoValue: {
+    color: theme.textDark,
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  actionsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: tokens.spacing.xl,
-    gap: tokens.spacing.md,
+    paddingHorizontal: tokens.spacing.sm,
   },
-  actionCard: {
-    flex: 1,
-    padding: tokens.spacing.md,
-    borderRadius: tokens.borderRadius.md,
+  actionItem: {
     alignItems: 'center',
   },
-  actionIconBg: {
+  actionBtn: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: theme.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  actionBtnActive: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: theme.cardBottom,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sheetTopRadius: {
+    backgroundColor: theme.sheet,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 16,
+    marginTop: 16,
+  },
+  sheetHandle: {
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    alignSelf: 'center',
+    marginBottom: 24,
+  },
+  sheetHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: tokens.spacing.xl,
+    paddingBottom: tokens.spacing.md,
+  },
+  listContent: {
+    paddingBottom: 100, // Space for tab bar
+  },
+  txItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.sheet,
+    paddingHorizontal: tokens.spacing.xl,
+    paddingVertical: tokens.spacing.lg,
+  },
+  txIconWrapper: {
+    marginRight: tokens.spacing.md,
+  },
+  txAvatarPlaceholder: {
     width: 48,
     height: 48,
     borderRadius: 24,
+    backgroundColor: theme.surface,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: tokens.spacing.sm,
-  },
-  sectionHeader: {
-    marginBottom: tokens.spacing.md,
-  },
-  transactionCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: tokens.colors.tealNeutral[800], // White
-    padding: tokens.spacing.md,
-    borderRadius: tokens.borderRadius.md,
-    marginBottom: tokens.spacing.sm,
-    ...tokens.shadows.sm,
-  },
-  txIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: tokens.spacing.md,
   },
   txDetails: {
     flex: 1,
-    paddingRight: tokens.spacing.sm,
-  },
-  emptyState: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 60,
-  },
-  emptyTitle: {
-    marginBottom: tokens.spacing.sm,
-  },
-  emptyDesc: {
-    textAlign: 'center',
   }
 });

@@ -22,12 +22,9 @@ export const PermissionScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={[tokens.colors.tealNeutral[900], tokens.colors.tealNeutral[50]]}
+        colors={[tokens.colors.tealNeutral[50], '#ffffff']}
         style={StyleSheet.absoluteFillObject}
       />
-      
-      {/* Decorative background glow */}
-      <View style={styles.glowCircle1} />
 
       <View style={styles.header}>
         <View style={styles.iconContainerMain}>
@@ -103,23 +100,14 @@ export const PermissionScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: tokens.colors.tealNeutral[900],
+    backgroundColor: '#ffffff',
   },
-  glowCircle1: {
-    position: 'absolute',
-    top: height * 0.1,
-    right: -width * 0.2,
-    width: width,
-    height: width,
-    borderRadius: width * 0.5,
-    backgroundColor: 'rgba(74, 0, 224, 0.04)',
-    transform: [{ scale: 1.2 }],
-  },
+
   header: {
     alignItems: 'center',
-    paddingTop: tokens.spacing.xxl + tokens.spacing.lg,
+    paddingTop: tokens.spacing.xl,
     paddingHorizontal: tokens.spacing.lg,
-    paddingBottom: tokens.spacing.xl,
+    paddingBottom: tokens.spacing.lg,
   },
   iconContainerMain: {
     width: 80,

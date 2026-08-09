@@ -158,15 +158,16 @@ const styles = StyleSheet.create({
   },
   bottomSection: {
     flex: 0.45,
-    paddingTop: 70,
+    paddingTop: 60,
     paddingHorizontal: tokens.spacing.xl,
-    paddingBottom: tokens.spacing.xxl + 20,
+    paddingBottom: tokens.spacing.xxl + 10,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   textContainer: {
     alignItems: 'center',
-    height: 100,
+    flex: 1,
+    justifyContent: 'flex-start',
   },
   title: {
     color: '#ffffff',
