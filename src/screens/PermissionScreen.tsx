@@ -1,23 +1,20 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Screen } from '../components/Screen';
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '../components/Text';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
 import { tokens } from '../theme/tokens';
 import { ShieldCheck, MessageSquare, Bell } from 'lucide-react-native';
 import { requestNotificationPermission } from '../services/notificationService';
+
+const { width, height } = Dimensions.get('window');
 
 export const PermissionScreen = ({ navigation }: any) => {
 
   const requestPermissions = async () => {
     console.log("Requesting permissions...");
-    
     // Request Push Notifications
     await requestNotificationPermission();
-
-    // Native SMS permission would be requested here in full prod
-    
     // Simulate delay
     setTimeout(() => {
       navigation.replace('Home');
@@ -25,9 +22,19 @@ export const PermissionScreen = ({ navigation }: any) => {
   };
 
   return (
-    <Screen style={styles.container}>
+    <View style={styles.container}>
+      <LinearGradient
+        colors={[tokens.colors.tealNeutral[900], tokens.colors.tealNeutral[800]]}
+        style={StyleSheet.absoluteFillObject}
+      />
+      
+      {/* Decorative background glow */}
+      <View style={styles.glowCircle1} />
+
       <View style={styles.header}>
-        <ShieldCheck size={48} color={tokens.colors.semantic.success} style={styles.icon} />
+        <View style={styles.iconContainerMain}>
+          <ShieldCheck size={40} color={tokens.colors.semantic.success} strokeWidth={2.5} />
+        </View>
         <Text variant="xl" weight="bold" style={styles.title}>
           How Hishab Works
         </Text>
@@ -36,104 +43,137 @@ export const PermissionScreen = ({ navigation }: any) => {
         </Text>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <Card variant="elevated" style={styles.card}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+        <View style={styles.card}>
           <View style={styles.featureRow}>
-            <View style={styles.iconContainer}>
-              <MessageSquare size={24} color={tokens.colors.tealNeutral[100]} />
+            <View style={[styles.iconContainer, { backgroundColor: 'rgba(0, 114, 255, 0.15)' }]}>
+              <MessageSquare size={22} color="#0072ff" />
             </View>
             <View style={styles.featureText}>
-              <Text weight="bold" variant="base">SMS Permission</Text>
-              <Text variant="sm" muted>Used exclusively for financial transaction parsing (bKash and Nagad) to automatically update your budgets and dashboard. Personal messages are ignored.</Text>
+              <Text weight="bold" variant="base" style={styles.cardTitle}>SMS Permission</Text>
+              <Text variant="sm" muted style={styles.cardDesc}>Used exclusively for financial transaction parsing (bKash and Nagad) to automatically update your budgets and dashboard. Personal messages are ignored.</Text>
             </View>
           </View>
-        </Card>
+        </View>
 
-        <Card variant="elevated" style={styles.card}>
+        <View style={styles.card}>
           <View style={styles.featureRow}>
-            <View style={styles.iconContainer}>
-              <Bell size={24} color={tokens.colors.tealNeutral[100]} />
+            <View style={[styles.iconContainer, { backgroundColor: 'rgba(0, 200, 83, 0.15)' }]}>
+              <Bell size={22} color="#00c853" />
             </View>
             <View style={styles.featureText}>
-              <Text weight="bold" variant="base">Notification Access</Text>
-              <Text variant="sm" muted>Required to catch transactions silently in the background without needing you to open the app.</Text>
+              <Text weight="bold" variant="base" style={styles.cardTitle}>Notification Access</Text>
+              <Text variant="sm" muted style={styles.cardDesc}>Required to catch transactions silently in the background without needing you to open the app.</Text>
             </View>
           </View>
-        </Card>
+        </View>
 
-        <Card variant="elevated" style={styles.card}>
-          <View style={styles.featureRow}>
-            <View style={styles.iconContainer}>
-              <MessageSquare size={24} color={tokens.colors.tealNeutral[100]} />
-            </View>
-            <View style={styles.featureText}>
-              <Text weight="bold" variant="base">Push Notifications (Android 13+)</Text>
-              <Text variant="sm" muted>Used exclusively to alert you when a transaction pushes you over your monthly category budget limit. No spam, ever.</Text>
-            </View>
-          </View>
-        </Card>
-
-        <Card variant="flat" style={styles.trustCard}>
+        <View style={styles.trustCard}>
           <Text variant="sm" muted style={styles.trustText}>
             🔒 Your privacy is absolute. SMS data is read locally on your device for parsing purposes only. We never send your messages to external servers or share them with any third parties.
           </Text>
-        </Card>
+        </View>
       </ScrollView>
 
       <View style={styles.footer}>
-        <Button 
-          title="Grant Permissions" 
-          variant="primary" 
-          size="large"
-          onPress={requestPermissions}
-        />
+        <LinearGradient
+          colors={tokens.colors.gradient.primary as [string, string, ...string[]]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.buttonGradient}
+        >
+          <Button 
+            title="Grant Permissions" 
+            variant="text" 
+            size="large"
+            onPress={requestPermissions}
+            style={styles.buttonTransparent}
+            textStyle={styles.buttonText}
+          />
+        </LinearGradient>
         <Button 
           title="Not Now" 
           variant="text" 
           size="medium"
-          onPress={() => console.log('Denied')}
-          style={{ marginTop: tokens.spacing.md }}
+          onPress={() => navigation.replace('Home')}
+          style={styles.notNowButton}
+          textStyle={styles.notNowText}
         />
       </View>
-    </Screen>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: tokens.spacing.lg,
+    flex: 1,
+    backgroundColor: tokens.colors.tealNeutral[900],
+  },
+  glowCircle1: {
+    position: 'absolute',
+    top: height * 0.1,
+    right: -width * 0.2,
+    width: width,
+    height: width,
+    borderRadius: width * 0.5,
+    backgroundColor: 'rgba(0, 114, 255, 0.05)',
+    transform: [{ scale: 1.2 }],
   },
   header: {
     alignItems: 'center',
-    marginTop: tokens.spacing.xl,
-    marginBottom: tokens.spacing.xl,
+    paddingTop: tokens.spacing.xxl + tokens.spacing.lg,
+    paddingHorizontal: tokens.spacing.lg,
+    paddingBottom: tokens.spacing.xl,
   },
-  icon: {
-    marginBottom: tokens.spacing.md,
+  iconContainerMain: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(0, 191, 165, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: tokens.spacing.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 191, 165, 0.2)',
   },
   title: {
     textAlign: 'center',
-    marginBottom: tokens.spacing.sm,
+    marginBottom: tokens.spacing.md,
+    letterSpacing: 0.5,
   },
   subtitle: {
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 24,
+    paddingHorizontal: tokens.spacing.sm,
+    color: '#a0babc',
   },
   content: {
     flex: 1,
   },
+  scrollContent: {
+    paddingHorizontal: tokens.spacing.lg,
+    paddingBottom: tokens.spacing.xl,
+  },
   card: {
     marginBottom: tokens.spacing.md,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderRadius: tokens.borderRadius.lg,
+    padding: tokens.spacing.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
   },
   featureRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
   iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: tokens.colors.gradient.primary[0], // using first color of gradient as solid
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: tokens.spacing.md,
@@ -141,17 +181,55 @@ const styles = StyleSheet.create({
   featureText: {
     flex: 1,
   },
+  cardTitle: {
+    marginBottom: 4,
+    color: tokens.colors.tealNeutral.textLight,
+  },
+  cardDesc: {
+    lineHeight: 20,
+    color: tokens.colors.tealNeutral.textMutedLight,
+  },
   trustCard: {
-    marginTop: tokens.spacing.lg,
+    marginTop: tokens.spacing.md,
+    padding: tokens.spacing.md,
     backgroundColor: 'transparent',
+    borderRadius: tokens.borderRadius.md,
     borderWidth: 1,
-    borderColor: tokens.colors.tealNeutral[100],
+    borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   trustText: {
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 22,
+    color: '#a0babc',
+    fontSize: 13,
   },
   footer: {
-    paddingBottom: tokens.spacing.lg,
+    paddingHorizontal: tokens.spacing.xl,
+    paddingBottom: tokens.spacing.xxl,
+    paddingTop: tokens.spacing.md,
+  },
+  buttonGradient: {
+    borderRadius: tokens.borderRadius.pill,
+    shadowColor: tokens.colors.gradient.primary[1],
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  buttonTransparent: {
+    backgroundColor: 'transparent',
+    paddingVertical: 18,
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 18,
+    letterSpacing: 0.5,
+  },
+  notNowButton: {
+    marginTop: tokens.spacing.sm,
+  },
+  notNowText: {
+    color: tokens.colors.tealNeutral.textMutedLight,
   }
 });
