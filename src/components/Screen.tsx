@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, useColorScheme, ViewProps } from 'react-native';
+import { View, StyleSheet, ViewProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tokens } from '../theme/tokens';
 
@@ -13,8 +13,7 @@ export const Screen: React.FC<ScreenProps> = ({
   safeArea = true,
   ...props 
 }) => {
-  const isDark = useColorScheme() === 'dark';
-  const backgroundColor = isDark ? tokens.colors.tealNeutral[900] : tokens.colors.tealNeutral[50];
+  const backgroundColor = tokens.colors.tealNeutral[50];
 
   const Container = safeArea ? SafeAreaView : View;
 

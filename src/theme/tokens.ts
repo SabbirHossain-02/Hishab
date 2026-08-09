@@ -1,31 +1,32 @@
 export const tokens = {
   colors: {
-    // Primary Gradient (Blue-to-Green) for key emphasis (headers, main CTAs, charts)
+    // Primary Gradient: Vibrant Royal Blue to Deep Purple (Fintech look)
     gradient: {
-      primary: ['#0072ff', '#00c853'], // Vibrant blue to classic green gradient
+      primary: ['#4A00E0', '#8E2DE2'], 
+      secondary: ['#FF9100', '#FFAB40'], // Warm orange accents
     },
-    // The deep teal neutral base for surfaces and text
+    // The Light Theme neutral base for surfaces and text
     tealNeutral: {
-      900: '#061517', // App background (Dark mode)
-      800: '#0a2326', // Surface / Card (Dark mode)
-      700: '#10363a', // Elevated Surface (Dark mode)
-      100: '#e5f3f4', // Surface / Card (Light mode)
-      50: '#f4f9f9',  // App background (Light mode)
-      textLight: '#f4f9f9',
-      textDark: '#061517',
-      textMutedLight: '#8da6a8',
-      textMutedDark: '#5c787a',
+      900: '#FFFFFF', // App background (Light mode)
+      800: '#FFFFFF', // Surface / Card
+      700: '#F8F9FA', // Elevated Surface
+      100: '#E9ECEF', // Subtle borders/dividers
+      50: '#F4F6F8',  // Very subtle background
+      textLight: '#FFFFFF', // For text on dark gradients
+      textDark: '#1A1D20', // Main dark text
+      textMutedLight: '#6C757D', // Muted text on light bg
+      textMutedDark: '#ADB5BD',
     },
     // Semantic colors
     semantic: {
-      success: '#00BFA5',
+      success: '#00C853',
       warning: '#FF9100',
       error: '#FF1744',
     }
   },
   typography: {
     fontFamily: {
-      sans: 'System', // Will replace with custom fonts (Inter/Hind) later
+      sans: 'System', 
       display: 'System', 
     },
     size: {
@@ -34,7 +35,7 @@ export const tokens = {
       base: 16,
       lg: 20,
       xl: 24,
-      display: 40, // For massive balances
+      display: 36, // Slightly reduced for cleaner look
     },
     weight: {
       regular: '400',
@@ -54,30 +55,30 @@ export const tokens = {
     sm: 8,
     md: 16,
     lg: 24,
-    xl: 32, // Heavy rounding on major container cards
+    xl: 32,
     pill: 9999,
   },
   shadows: {
-    // Deliberate visual hierarchy (flat, elevated, full-bleed, inset)
+    // Soft diffused shadows for the light theme reference
     sm: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.05,
-      shadowRadius: 4,
+      shadowColor: '#000000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.04,
+      shadowRadius: 8,
       elevation: 2,
     },
     md: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.1,
-      shadowRadius: 8,
+      shadowColor: '#000000',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.08,
+      shadowRadius: 16,
       elevation: 4,
     },
     lg: {
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.15,
-      shadowRadius: 16,
+      shadowColor: '#4A00E0', // Colored shadow for primary elements
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.25,
+      shadowRadius: 24,
       elevation: 8,
     },
   }

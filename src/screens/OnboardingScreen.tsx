@@ -10,13 +10,12 @@ const { width, height } = Dimensions.get('window');
 export const OnboardingScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
-      {/* Deep gradient background */}
       <LinearGradient
-        colors={[tokens.colors.tealNeutral[900], tokens.colors.tealNeutral[800]]}
+        colors={[tokens.colors.tealNeutral[900], tokens.colors.tealNeutral[50]]}
         style={StyleSheet.absoluteFillObject}
       />
       
-      {/* Decorative background glow */}
+      {/* Decorative background glow for Light Theme */}
       <View style={styles.glowCircle1} />
       <View style={styles.glowCircle2} />
 
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     height: width * 0.8,
     borderRadius: width * 0.4,
-    backgroundColor: 'rgba(0, 200, 83, 0.08)',
+    backgroundColor: 'rgba(74, 0, 224, 0.05)',
     transform: [{ scaleX: 1.2 }],
   },
   glowCircle2: {
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
     width: width,
     height: width,
     borderRadius: width * 0.5,
-    backgroundColor: 'rgba(0, 114, 255, 0.06)',
+    backgroundColor: 'rgba(142, 45, 226, 0.05)',
     transform: [{ scaleY: 1.3 }],
   },
   content: {
@@ -97,14 +96,14 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     padding: tokens.spacing.md,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    backgroundColor: '#ffffff',
     borderRadius: 36,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.05)',
+    borderColor: tokens.colors.tealNeutral[100],
     marginBottom: tokens.spacing.xl,
-    shadowColor: '#000',
+    shadowColor: '#4A00E0',
     shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.15,
     shadowRadius: 20,
     elevation: 10,
   },
@@ -117,18 +116,19 @@ const styles = StyleSheet.create({
     marginBottom: tokens.spacing.sm,
     textAlign: 'center',
     letterSpacing: 0.5,
+    color: tokens.colors.tealNeutral.textDark,
   },
   subtitle: {
     textAlign: 'center',
     marginBottom: tokens.spacing.xl,
-    color: '#a0babc', 
+    color: tokens.colors.tealNeutral.textMutedDark, 
     lineHeight: 28,
   },
   description: {
     textAlign: 'center',
     lineHeight: 24,
     paddingHorizontal: tokens.spacing.md,
-    opacity: 0.8,
+    color: tokens.colors.tealNeutral.textMutedLight,
   },
   footer: {
     paddingHorizontal: tokens.spacing.xl,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   buttonGradient: {
     borderRadius: tokens.borderRadius.pill,
-    shadowColor: tokens.colors.gradient.primary[1],
+    shadowColor: tokens.colors.gradient.primary[0],
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 16,

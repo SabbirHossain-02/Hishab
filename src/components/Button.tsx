@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, TouchableOpacityProps, StyleSheet, useColorScheme, ActivityIndicator, View } from 'react-native';
+import { TouchableOpacity, TouchableOpacityProps, StyleSheet, ActivityIndicator, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from './Text';
 import { tokens } from '../theme/tokens';
@@ -24,17 +24,15 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const isDark = useColorScheme() === 'dark';
-  
   const getContainerStyle = () => {
     switch (variant) {
       case 'secondary':
-        return { backgroundColor: isDark ? tokens.colors.tealNeutral[700] : tokens.colors.tealNeutral[100] };
+        return { backgroundColor: tokens.colors.tealNeutral[100] };
       case 'outline':
         return { 
           backgroundColor: 'transparent',
           borderWidth: 1, 
-          borderColor: isDark ? tokens.colors.tealNeutral[700] : tokens.colors.tealNeutral[100] 
+          borderColor: tokens.colors.tealNeutral[100] 
         };
       case 'text':
         return { backgroundColor: 'transparent' };
@@ -46,9 +44,9 @@ export const Button: React.FC<ButtonProps> = ({
   const getTextColor = () => {
     if (variant === 'primary') return '#FFFFFF';
     if (variant === 'outline' || variant === 'text') {
-      return isDark ? tokens.colors.tealNeutral.textLight : tokens.colors.tealNeutral.textDark;
+      return tokens.colors.tealNeutral.textDark;
     }
-    return isDark ? tokens.colors.tealNeutral.textLight : tokens.colors.tealNeutral.textDark;
+    return tokens.colors.tealNeutral.textDark;
   };
 
   const getPadding = () => {

@@ -13,9 +13,7 @@ export const PermissionScreen = ({ navigation }: any) => {
 
   const requestPermissions = async () => {
     console.log("Requesting permissions...");
-    // Request Push Notifications
     await requestNotificationPermission();
-    // Simulate delay
     setTimeout(() => {
       navigation.replace('Home');
     }, 1000);
@@ -24,7 +22,7 @@ export const PermissionScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={[tokens.colors.tealNeutral[900], tokens.colors.tealNeutral[800]]}
+        colors={[tokens.colors.tealNeutral[900], tokens.colors.tealNeutral[50]]}
         style={StyleSheet.absoluteFillObject}
       />
       
@@ -33,7 +31,7 @@ export const PermissionScreen = ({ navigation }: any) => {
 
       <View style={styles.header}>
         <View style={styles.iconContainerMain}>
-          <ShieldCheck size={40} color={tokens.colors.semantic.success} strokeWidth={2.5} />
+          <ShieldCheck size={40} color={tokens.colors.gradient.primary[0]} strokeWidth={2.5} />
         </View>
         <Text variant="xl" weight="bold" style={styles.title}>
           How Hishab Works
@@ -46,8 +44,8 @@ export const PermissionScreen = ({ navigation }: any) => {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <View style={styles.card}>
           <View style={styles.featureRow}>
-            <View style={[styles.iconContainer, { backgroundColor: 'rgba(0, 114, 255, 0.15)' }]}>
-              <MessageSquare size={22} color="#0072ff" />
+            <View style={[styles.iconContainer, { backgroundColor: 'rgba(74, 0, 224, 0.1)' }]}>
+              <MessageSquare size={22} color={tokens.colors.gradient.primary[0]} />
             </View>
             <View style={styles.featureText}>
               <Text weight="bold" variant="base" style={styles.cardTitle}>SMS Permission</Text>
@@ -58,8 +56,8 @@ export const PermissionScreen = ({ navigation }: any) => {
 
         <View style={styles.card}>
           <View style={styles.featureRow}>
-            <View style={[styles.iconContainer, { backgroundColor: 'rgba(0, 200, 83, 0.15)' }]}>
-              <Bell size={22} color="#00c853" />
+            <View style={[styles.iconContainer, { backgroundColor: 'rgba(142, 45, 226, 0.1)' }]}>
+              <Bell size={22} color={tokens.colors.gradient.primary[1]} />
             </View>
             <View style={styles.featureText}>
               <Text weight="bold" variant="base" style={styles.cardTitle}>Notification Access</Text>
@@ -116,7 +114,7 @@ const styles = StyleSheet.create({
     width: width,
     height: width,
     borderRadius: width * 0.5,
-    backgroundColor: 'rgba(0, 114, 255, 0.05)',
+    backgroundColor: 'rgba(74, 0, 224, 0.04)',
     transform: [{ scale: 1.2 }],
   },
   header: {
@@ -129,23 +127,24 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(0, 191, 165, 0.1)',
+    backgroundColor: 'rgba(74, 0, 224, 0.08)',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: tokens.spacing.lg,
     borderWidth: 1,
-    borderColor: 'rgba(0, 191, 165, 0.2)',
+    borderColor: 'rgba(74, 0, 224, 0.1)',
   },
   title: {
     textAlign: 'center',
     marginBottom: tokens.spacing.md,
     letterSpacing: 0.5,
+    color: tokens.colors.tealNeutral.textDark,
   },
   subtitle: {
     textAlign: 'center',
     lineHeight: 24,
     paddingHorizontal: tokens.spacing.sm,
-    color: '#a0babc',
+    color: tokens.colors.tealNeutral.textMutedLight,
   },
   content: {
     flex: 1,
@@ -156,15 +155,16 @@ const styles = StyleSheet.create({
   },
   card: {
     marginBottom: tokens.spacing.md,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    backgroundColor: '#ffffff',
     borderRadius: tokens.borderRadius.lg,
     padding: tokens.spacing.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.05)',
-    shadowColor: '#000',
+    borderColor: tokens.colors.tealNeutral[100],
+    shadowColor: '#4A00E0',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 4,
   },
   featureRow: {
     flexDirection: 'row',
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     marginBottom: 4,
-    color: tokens.colors.tealNeutral.textLight,
+    color: tokens.colors.tealNeutral.textDark,
   },
   cardDesc: {
     lineHeight: 20,
@@ -195,12 +195,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: tokens.borderRadius.md,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderColor: tokens.colors.tealNeutral[100],
   },
   trustText: {
     textAlign: 'center',
     lineHeight: 22,
-    color: '#a0babc',
+    color: tokens.colors.tealNeutral.textMutedDark,
     fontSize: 13,
   },
   footer: {
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
   },
   buttonGradient: {
     borderRadius: tokens.borderRadius.pill,
-    shadowColor: tokens.colors.gradient.primary[1],
+    shadowColor: tokens.colors.gradient.primary[0],
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 16,

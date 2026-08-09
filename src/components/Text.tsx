@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text as RNText, TextProps as RNTextProps, StyleSheet, useColorScheme } from 'react-native';
+import { Text as RNText, TextProps as RNTextProps, StyleSheet } from 'react-native';
 import { tokens } from '../theme/tokens';
 
 export interface TextProps extends RNTextProps {
@@ -17,11 +17,9 @@ export const Text: React.FC<TextProps> = ({
   style, 
   ...props 
 }) => {
-  const isDark = useColorScheme() === 'dark';
-  
   const defaultColor = muted 
-    ? (isDark ? tokens.colors.tealNeutral.textMutedDark : tokens.colors.tealNeutral.textMutedLight)
-    : (isDark ? tokens.colors.tealNeutral.textLight : tokens.colors.tealNeutral.textDark);
+    ? tokens.colors.tealNeutral.textMutedLight
+    : tokens.colors.tealNeutral.textDark;
 
   return (
     <RNText
