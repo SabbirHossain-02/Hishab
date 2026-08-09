@@ -96,7 +96,7 @@ export const HomeScreen = () => {
         <TouchableOpacity style={styles.iconButton}>
           <Bell size={20} color={theme.textLight} />
         </TouchableOpacity>
-      </TouchableOpacity>
+      </View>
 
       <Text variant="sm" style={styles.balanceLabel}>Total Balance</Text>
       <Text variant="display" weight="bold" style={styles.balanceValue}>
