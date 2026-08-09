@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Screen } from '../components/Screen';
 import { Text } from '../components/Text';
@@ -91,12 +91,12 @@ export const HomeScreen = () => {
         </View>
         <View style={styles.headerRightControls}>
           <View style={styles.profileAvatar} />
-          <Button 
-            variant="text" 
+          <TouchableOpacity 
             style={styles.menuBtn}
             onPress={() => {}}
-            children={<Menu size={24} color={tokens.colors.tealNeutral.textDark} />}
-          />
+          >
+            <Menu size={24} color={tokens.colors.tealNeutral.textDark} />
+          </TouchableOpacity>
         </View>
       </View>
 
